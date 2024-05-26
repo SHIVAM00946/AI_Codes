@@ -1,0 +1,44 @@
+Alpha Beta pruning:
+
+Code:
+
+tree = {
+'A': ['B', 'C'],
+'B': ['D', 'E'],
+'C': ['F', 'G'],
+'D': [2, 3],
+'E': [5, 9],
+'F': [0, 1],
+'G': [7, 5],
+}
+
+def minimax_alpha_beta(node, alpha, beta, is_maximizing):
+    if isinstance(node, str):
+      children = tree[node]
+      if is_maximizing:
+         value = -float('inf')
+         for child in children:
+             value = max(value, minimax_alpha_beta(child, alpha, beta, False))
+             alpha = max(alpha, value)
+             if alpha >= beta:
+                break
+         return value
+      else:
+         value = float('inf')
+         for child in children:
+             value = min(value, minimax_alpha_beta(child, alpha, beta, True))
+             beta = min(beta, value)
+             if alpha >= beta:
+                break
+         return value
+    else:
+       return node
+
+optimal_value = minimax_alpha_beta('A', -float('inf'), float('inf'), True)
+print("Optimal Value for the Root Node (A):", optimal_value)
+
+
+
+
+Output:
+Optimal Value for the Root Node (A): 3
