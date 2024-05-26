@@ -1,0 +1,80 @@
+import heapq
+
+# Define the A* search function with inputs tree (graph), start node, goal node, and heuristics
+def astar_search(tree, start, goal, heuristics):
+    # Initialize the open list with the starting node and a cost of 0
+    open_list = [(0, start)]
+    # Initialize the closed list as an empty set (nodes already evaluated)
+    closed_list = set()
+    # Initialize a dictionary to store the cost to reach each node, initially set to infinity
+    g_costs = {node: float('inf') for node in tree}
+    # Set the cost to reach the starting node as 0
+    g_costs[start] = 0
+    # Initialize a dictionary to store the parent node of each node
+    parents = {}
+
+    # Main loop: continue until there are nodes in the open list
+    while open_list:
+        # Pop the node with the lowest f_cost (g_cost + heuristic) from the open list
+        _, current_node = heapq.heappop(open_list)
+
+        # Check if the current node is the goal node
+        if current_node == goal:
+            # Reconstruct and return the path from the goal to the start
+            path = [current_node]
+            while current_node != start:
+                current_node = parents[current_node]
+                path.append(current_node)
+            path.reverse()
+            return path
+
+        # If the current node is not the goal, add it to the closed list
+        if current_node not in closed_list:
+            closed_list.add(current_node)
+
+            # Explore neighbors of the current node and update their g_costs and f_costs
+            for child, cost in tree[current_node]:
+                # Calculate the tentative g_cost for the child node
+                tentative_g_cost = g_costs[current_node] + cost
+                # If this g_cost is lower than the previously recorded g_cost, update it
+                if tentative_g_cost < g_costs[child]:
+                    g_costs[child] = tentative_g_cost
+                    # Calculate the f_cost for the child node (g_cost + heuristic)
+                    f_cost = tentative_g_cost + heuristics[child]
+                    # Add the child node to the open list with its f_cost
+                    heapq.heappush(open_list, (f_cost, child))
+                    # Record the parent of the child node
+                    parents[child] = current_node
+
+    # If the open list becomes empty and the goal is not reached, return None (no path found)
+    return None
+
+# Define the tree structure (graph) and heuristic values for the nodes
+tree = {
+    'S': [('A', 1), ('B', 4)],
+    'A': [('B', 2), ('C', 5), ('D', 12)],
+    'B': [('C', 2)],
+    'C': [('D', 3)],
+    'D': [],
+}
+
+heuristics = {
+    'S': 7,
+    'A': 6,
+    'B': 2,
+    'C': 1,
+    'D': 0,
+}
+
+# Define the start and goal nodes
+start_node = 'S'
+goal_node = 'D'
+
+# Call the A* search function to find the path from the start to the goal
+path = astar_search(tree, start_node, goal_node, heuristics)
+
+# Print the result: either the path found or a message indicating no path found
+if path:
+    print("Path from", start_node, "to", goal_node, ":", ' -> '.join(path))
+else:
+    print("No path found from", start_node, "to", goal_node)

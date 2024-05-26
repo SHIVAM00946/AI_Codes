@@ -1,0 +1,31 @@
+Algo:
+1. Importing the heapq Module:
+The line import heapq ensures that we can use the heap queue (priority queue) data structure from the Python standard library. We’ll use this data structure to efficiently manage the open list of nodes during the A* search.
+
+2. Defining the astar_search Function:
+The astar_search function takes four inputs:
+(a)	tree: A graph (represented as a dictionary) where each node maps to a list of its neighbors along with their associated costs.
+(b)	start: The starting node for the A* search.
+(c)	goal: The goal node we want to reach.
+(d)	(d)heuristics: A heuristic function that estimates the cost from a given node to the goal.
+3. Initializing Data Structures:
+(a) open_list: A priority queue (heap) containing nodes to be explored. It starts with the start node and a cost of 0.
+(b) closed_list: An empty set to keep track of nodes that have already been evaluated.
+(c) g_costs: A dictionary that stores the cost to reach each node. Initially, all costs are set to infinity except for the start node (which has a cost of 0).
+(d) parents: A dictionary to store the parent node of each node (used for path reconstruction).
+Main Loop:
+4. The loop continues until there are nodes in the open_list.
+In each iteration:
+The node with the lowest f_cost (g_cost + heuristic) is popped from the open_list.
+If this node is the goal, the path from the goal to the start is reconstructed and returned.
+Otherwise, the node is added to the closed_list.
+The neighbors of the current node are explored, and their g_costs and f_costs are updated if a better path is found.
+5. Exploring Neighbors:
+For each neighbor (child) of the current node:
+Calculate the tentative g_cost for the child node by adding the cost of the edge from the current node to the child.
+If this g_cost is lower than the previously recorded g_cost for the child, update it.
+This step ensures that we consider the most efficient path to each neighbor.
+6. Heuristic Function:
+The heuristics function estimates the cost from a given node to the goal. It helps guide the search towards the goal efficiently.
+The A* algorithm combines the actual cost (g_cost) and the heuristic estimate to prioritize nodes with lower total cost.
+
