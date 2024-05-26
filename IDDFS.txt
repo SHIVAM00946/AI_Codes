@@ -1,0 +1,40 @@
+IDDFS
+
+Algorithm:
+
+def DLS(graph, node, goal, depth):
+# Implementation of DLS
+   if depth == 0 and node == goal:
+       return True
+   elif depth > 0:
+       for neighbor in graph[node]:
+          if DLS(graph, neighbor, goal, depth - 1):
+              return True
+   return False
+
+def IDDFS(graph, start, goal, max_depth):
+# Implementation of IDDFS
+   for depth in range(max_depth + 1):
+       if DLS(graph, start, goal, depth):
+           return True
+   return False
+
+# Example usage:
+graph = {
+'A': ['B', 'C'],
+'B': ['D', 'E'],
+'C': ['F'],
+'D': [],
+'E': [],
+'F': []
+}
+
+start_node = 'A'
+goal_node = 'F'
+max_depth = 3
+
+
+if IDDFS(graph, start_node, goal_node, max_depth):
+    print("Goal node found within depth limit")
+else:
+     print("Goal node not found within depth limit")
